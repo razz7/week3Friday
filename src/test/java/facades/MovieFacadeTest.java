@@ -2,6 +2,7 @@ package facades;
 
 import utils.EMF_Creator;
 import entities.Movie;
+import java.util.Arrays;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -68,8 +69,8 @@ public class MovieFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
-            em.persist(new Movie("Some txt", 4));
-            em.persist(new Movie("aaa", 3));
+            em.persist(new Movie("Rasmus Klump", 10, 2001, Arrays.asList("Rasmus Hemmingsen")));
+            em.persist(new Movie("Blues Brothers", 5, 1980, Arrays.asList("John John", "Hans Hans")));
 
             em.getTransaction().commit();
         } finally {

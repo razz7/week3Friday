@@ -6,6 +6,7 @@ import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
 import java.net.URI;
+import java.util.Arrays;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
@@ -71,8 +72,8 @@ public class MovieResourceTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
-            em.persist(new Movie("The Great Gatsby",4));
-            em.persist(new Movie("Lord Of The Rings",5));
+            em.persist(new Movie("The Great Gatsby",4,2001, Arrays.asList("John test", "Test test")));
+            em.persist(new Movie("Lord Of The Rings",5,2006, Arrays.asList("Test", "test")));
            
             em.getTransaction().commit();
         } finally {
