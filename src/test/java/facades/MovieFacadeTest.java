@@ -17,6 +17,7 @@ import utils.Settings;
 import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
 import static org.hamcrest.MatcherAssert.assertThat;
+import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -65,11 +66,10 @@ public class MovieFacadeTest {
         }
     }
 
-
 // Setup the DataBase in a known state BEFORE EACH TEST
 //TODO -- Make sure to change the script below to use YOUR OWN entity class
-@BeforeEach
-        public void setUp() {
+    @BeforeEach
+    public void setUp() {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -83,23 +83,24 @@ public class MovieFacadeTest {
         }
     }
 
-    
+    @Test
+    public void movieIsEqual() {
+        Movie movieExp = new Movie("Rasmus Klump", 10, 2001, Arrays.asList("Rasmus Hemmingsen"));
+        Movie movieExp1 = new Movie("Rasmus Klump", 10, 2001, Arrays.asList("Rasmus Hemmingsen"));
+        assertThat(movieExp.getName(), equalTo(movieExp1.getName()));
 
-   
-        
-//    @Test
-//        public void getMovieWithID() {
-//            Movie movie = facade.getMovieWithID(1);
-//            Movie movieExp = new Movie("Rasmus Klump", 10, 2001, Arrays.asList("Rasmus Hemmingsen"));
-//            assertEquals(movie, movieExp);
-//            
-//            
-//        }
-        
-      @Test
-      public void getAllMovies() {
-          List<Movie> movies = facade.getAllMovies();
-          assertEquals(movies.size(), 2);
-      }
+    }
+
+    @Test
+    public void getAllMovies() {
+        List<Movie> movies = facade.getAllMovies();
+        assertEquals(movies.size(), 2);
+    }
+    
+    @Test
+    public void testArray() {
+        List<Movie> movies = facade.getAllMovies();
+        Matchers.hasItemInArray(movies.get(0));
+    }
 
 }

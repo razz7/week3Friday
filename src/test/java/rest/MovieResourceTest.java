@@ -14,6 +14,8 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -72,9 +74,9 @@ public class MovieResourceTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
-            em.persist(new Movie("The Great Gatsby",4,2001, Arrays.asList("John test", "Test test")));
-            em.persist(new Movie("Lord Of The Rings",5,2006, Arrays.asList("Test", "test")));
-           
+            em.persist(new Movie("Rasmus Klump", 10, 2001, Arrays.asList("Rasmus Hemmingsen")));
+            em.persist(new Movie("Blues Brothers", 5, 1980, Arrays.asList("John John", "Hans Hans")));
+            
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -89,13 +91,13 @@ public class MovieResourceTest {
    
     //This test assumes the database contains two rows
     @Test
-    public void testDummyMsg() throws Exception {
+    public void testServerIsRunning() throws Exception {
         given()
         .contentType("application/json")
         .get("/movie/").then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
-        .body("msg", equalTo("Hello World"));   
+        .body("msg", equalTo("serverIsRunning"));   
     }
     
     @Test
@@ -107,6 +109,35 @@ public class MovieResourceTest {
         .statusCode(HttpStatus.OK_200.getStatusCode())
         .body("count", equalTo(2));   
     }
+    
+    @Test
+    public void testContainActor() throws Exception {
+        given()
+        .contentType("application/json")
+        .get("/movie/all").then()
+        .assertThat()
+        .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body(Matchers.containsString("Rasmus Hemmingsen")); 
+    }
+    
+    @Test
+    public void getActorByName() throws Exception {
+        given()
+        .contentType("application/json")
+        .get("/movie/name/RasmusKlump").then()
+        .assertThat()
+        .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body(Matchers.containsString("Rasmus Klump")); 
+    }
+//    @Test
+//    public void getMoviebyID() throws Exception {
+//        given()
+//        .contentType("application/json")
+//        .get("/movie/2").then()
+//        .assertThat()
+//        .statusCode(HttpStatus.OK_200.getStatusCode())
+//        .body("name", Matchers.contains("Rasmus Hemmingsen")); 
+//    }
     
     
 }
