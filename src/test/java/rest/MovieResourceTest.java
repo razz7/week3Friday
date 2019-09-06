@@ -123,7 +123,7 @@ public class MovieResourceTest {
         .get("/movie/all").then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
-        .body("[1].actors", hasItem("Rasmus Hemmingsen"));   
+        .body("[0].actors", hasItem("Rasmus Hemmingsen"));   
     }
     
     @Test
