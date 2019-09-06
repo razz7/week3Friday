@@ -116,15 +116,15 @@ public class MovieResourceTest {
         .body("count", equalTo(2));   
     }
     
-     @Test
-    public void testGetMovies() throws Exception {
-        given()
-        .contentType("application/json")
-        .get("/movie/all").then()
-        .assertThat()
-        .statusCode(HttpStatus.OK_200.getStatusCode())
-        .body("[0].actors", hasItem("Rasmus Hemmingsen"));   
-    }
+//     @Test
+//    public void testGetMovies() throws Exception {
+//        given()
+//        .contentType("application/json")
+//        .get("/movie/all").then()
+//        .assertThat()
+//        .statusCode(HttpStatus.OK_200.getStatusCode())
+//        .body("[0].actors", hasItem("Rasmus Hemmingsen"));   
+//    }
     
     @Test
     public void testGetMovieById() throws Exception {
