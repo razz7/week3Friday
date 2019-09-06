@@ -1,5 +1,5 @@
 
-let url = "http://localhost:8080/jpareststarter/api/movie/all"
+let url = "https://rhemmingsen.com/rest-jpa-devops-starter/api/movie/all"
 
 function click() {
     fetch(url).then(resposne => response.json())
