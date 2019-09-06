@@ -6,7 +6,9 @@ import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
@@ -16,7 +18,9 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +41,7 @@ public class MovieResourceTest {
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
-
+    static List<Movie> movies = new ArrayList<>();
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
         return GrizzlyHttpServerFactory.createHttpServer(BASE_URI, rc);
@@ -70,6 +74,7 @@ public class MovieResourceTest {
     //TODO -- Make sure to change the script below to use YOUR OWN entity class
     @BeforeEach
     public void setUp() {
+        
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -81,6 +86,7 @@ public class MovieResourceTest {
         } finally {
             em.close();
         }
+        
     }
     
     @Test
@@ -110,34 +116,27 @@ public class MovieResourceTest {
         .body("count", equalTo(2));   
     }
     
-    @Test
-    public void testContainActor() throws Exception {
+     @Test
+    public void testGetMovies() throws Exception {
         given()
         .contentType("application/json")
         .get("/movie/all").then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
-        .body(Matchers.containsString("Rasmus Hemmingsen")); 
+        .body("[1].actors", hasItem("Rasmus Hemmingsen"));   
     }
     
     @Test
-    public void getActorByName() throws Exception {
+    public void testGetMovieById() throws Exception {
+        movies = facades.MovieFacade.getFacadeExample(emf).getAllMovies();
         given()
         .contentType("application/json")
-        .get("/movie/name/RasmusKlump").then()
+        .get("/movie/" + movies.get(0).getId()).then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
-        .body(Matchers.containsString("Rasmus Klump")); 
+        .body("name", equalTo(movies.get(0).getName()));   
     }
-//    @Test
-//    public void getMoviebyID() throws Exception {
-//        given()
-//        .contentType("application/json")
-//        .get("/movie/2").then()
-//        .assertThat()
-//        .statusCode(HttpStatus.OK_200.getStatusCode())
-//        .body("name", Matchers.contains("Rasmus Hemmingsen")); 
-//    }
+    
     
     
 }
