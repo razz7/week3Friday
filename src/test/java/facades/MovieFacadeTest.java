@@ -3,8 +3,10 @@ package facades;
 import utils.EMF_Creator;
 import entities.Movie;
 import java.util.Arrays;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,6 +16,9 @@ import org.junit.jupiter.api.Test;
 import utils.Settings;
 import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.equalTo;
 
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
@@ -78,16 +83,23 @@ public class MovieFacadeTest {
         }
     }
 
-    @AfterEach
-        public void tearDown() {
-       
+    
 
-    }
-
-    // TODO: Delete or change this method 
-    @Test
-        public void testAFacadeMethod() {
-        assertEquals(2, facade.getMovieCount(), "Expects two rows in the database");
-    }
+   
+        
+//    @Test
+//        public void getMovieWithID() {
+//            Movie movie = facade.getMovieWithID(1);
+//            Movie movieExp = new Movie("Rasmus Klump", 10, 2001, Arrays.asList("Rasmus Hemmingsen"));
+//            assertEquals(movie, movieExp);
+//            
+//            
+//        }
+        
+      @Test
+      public void getAllMovies() {
+          List<Movie> movies = facade.getAllMovies();
+          assertEquals(movies.size(), 2);
+      }
 
 }

@@ -6,7 +6,9 @@ import com.sun.research.ws.wadl.Param;
 import entities.Movie;
 import utils.EMF_Creator;
 import facades.MovieFacade;
+import java.util.Arrays;
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -68,11 +70,37 @@ public class MovieResource {
         List<Movie> movie = FACADE.getMovieWithName(name);
         String g = GSON.toJson(movie);
         return g;
-        
+    }
+    
+    @GET    
+    @Path("getdummydatalichking")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String createDummyData() {
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+        List<String> jamesBondCast = Arrays.asList("Daniel Craig","Naomie Watts");
+        em.persist(new Movie("James Bond", 4, 2004, jamesBondCast));
+        List<String> TGGCast = Arrays.asList("Leonardo Dicaprio","Toby Mcquire");
+        em.persist(new Movie("The Great Gatsby", 9, 2010, TGGCast));
+        List<String> spidermanCast = Arrays.asList("Andrew Garfield","Emma Stone");
+        em.persist(new Movie("Spiderman 1", 8, 2006, spidermanCast));
+        List<String> LOTRCast = Arrays.asList("Viggo Mortensen","Orlando Bloom", "Ian McKellen", "Liv Tyler");
+        em.persist(new Movie("Lord Of the Rings", 10, 2003, LOTRCast));
+        List<String> BadNeighbours = Arrays.asList("Seth Rogen","Zac Efron");
+        em.persist(new Movie("Bad Neighbours", 2, 2014, BadNeighbours));
+        List<String> peterPlysCast = Arrays.asList("Peter Plys","Æsel", "Tigerdyr");
+        em.persist(new Movie("Peter Plys", 10, 2000, peterPlysCast));
+        em.getTransaction().commit();
+        em.close();
+        return "done";
     }
         
+        
+    }
     
-}
+        
+    
+
   
     
 
